@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        td {
+            border: 1px solid #ccc;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 42px;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <p></p>
+    <script>
+        //배열생성하기
+        let arr = [];
+        //테이블 tr선택하기
+        let trs = document.querySelectorAll('tr');
+        let 차례 = 'X';
+        let gameEnd = false;
+        let ptag = document.querySelector('p');
+        trs.forEach((tr,index)=>{
+            let tds = tr.children;
+            arr[index] = new Array();
+            for(let i=0; i<tds.length; i++){
+                arr[index][i] = tds[i];
+                arr[index][i].addEventListener('click',function(){
+                    checkTd(index,i);
+                })
+            }
+        })
+        console.table(arr);
+        function checkTd(줄,칸){
+            //몇줄몇칸이 비어있는지?
+            if(arr[줄][칸].innerHTML == ""){
+                arr[줄][칸].innerHTML = 차례;
+                //가로줄검사
+                if(arr[줄][0].innerHTML == 차례 
+                && arr[줄][1].innerHTML == 차례
+                && arr[줄][2].innerHTML == 차례
+                 ){
+                     ptag.innerHTML=차례+'님이 이겼습니다.';
+                     gameEnd = true;
+                 }
+                //세로줄검사
+                if(arr[0][칸].innerHTML == 차례 
+                && arr[1][칸].innerHTML == 차례
+                && arr[2][칸].innerHTML == 차례
+                 ){
+                    ptag.innerHTML=차례+'님이 이겼습니다.';
+                     gameEnd = true;
+                 }
+                //대각선검사
+                if(줄-칸 == 0){
+                    if(arr[0][0].innerHTML == 차례 
+                    && arr[1][1].innerHTML == 차례
+                    && arr[2][2].innerHTML == 차례
+                     ){
+                        ptag.innerHTML=차례+'님이 이겼습니다.';
+                     gameEnd = true;
+                    }
+                }
+                if(Math.abs(줄-칸) == 2){
+                    if(arr[2][0].innerHTML == 차례 
+                    && arr[1][1].innerHTML == 차례
+                    && arr[0][2].innerHTML == 차례
+                     ){
+                    ptag.innerHTML=차례+'님이 이겼습니다.';
+                     gameEnd = true;
+                    }
+                }
+                if(gameEnd){
+                    resetGame();
+                }
+                차례 = 차례 == 'X'? 'O': 'X';
+            }
+          
+        }
+        function resetGame(){
+            arr.forEach((tr, i)=>{
+                tr.forEach((td,j) => {
+                    arr[i][j].innerHTML = '';
+                })
+            })
+            gameEnd = false;
+        }
+    </script>
+</body>
+</html>
